@@ -9,6 +9,8 @@ import java.util.ArrayList;
 //https://adventofcode.com/2020/day/1
 public class Advent1 {
 
+	File file = new File("src/files/advent1.txt");
+
 	public void run(){
 		findTwoNumbersAndMultiply();
 //		findThreeNumbersAndMultiply();
@@ -29,8 +31,6 @@ public class Advent1 {
   }
 
   public void findTwoNumbersAndMultiply() {
-    File file = new File("advent1.txt");
-
     ArrayList<Integer> numbers = null;
     try {
       numbers = readFile(file);
@@ -50,8 +50,6 @@ public class Advent1 {
 
   // 2 STAR exercise
   public void findThreeNumbersAndMultiply() {
-    File file = new File("advent1.txt");
-
     ArrayList<Integer> numbers = null;
     try {
       numbers = readFile(file);
