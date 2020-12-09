@@ -3,7 +3,7 @@ package com.company;
 public class Main {
 
   public static void main(String[] args) {
-    Advent1 advent1 = new Advent1();
-    advent1.run();
+    Advent5 advent5 = new Advent5();
+    advent5.run();
   }
 }
