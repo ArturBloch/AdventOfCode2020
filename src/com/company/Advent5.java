@@ -21,6 +21,21 @@ public class Advent5 {
         System.out.printf("Biggest seat ID is: %d", seats.stream().max(Integer::compare).get());
     }
 
+    public ArrayList<Integer> generateSeats(){
+        ArrayList<Integer> seats = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                seats.add(findSeat(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return seats;
+    }
+
+    // two star
     public int findMissingSeat(List<Integer> seats){
         int min = seats.stream().min(Integer::compare).get();
         int max =seats.stream().max(Integer::compare).get();
@@ -32,21 +47,7 @@ public class Advent5 {
         return -1;
     }
 
-    public ArrayList<Integer> generateSeats(){
-        ArrayList<Integer> seats = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            int validFields = 0;
-            while ((line = reader.readLine()) != null) {
-               seats.add(findSeat(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return seats;
-    }
-
+    //one star
     public int findSeat(String inputLine){
         double rowLow = 0;
         double rowHigh = 127;
