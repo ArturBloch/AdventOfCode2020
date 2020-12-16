@@ -129,8 +129,6 @@ public class Advent12 implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
 
