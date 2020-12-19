@@ -3,30 +3,27 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Advent15 implements Runnable {
 
 
-	public ArrayList<Long> startingNumbers = new ArrayList<>();
+	public ArrayList<Integer> startingNumbers = new ArrayList<>();
 	public File file = new File("src/files/advent15.txt");
-	public HashMap<Long, Number> numberMap = new LinkedHashMap<>(300000);
+	public Number[] numbers = new Number[30000000];
 
 	class Number {
-		long number;
-		long lastTurn;
-		long secondToLastTurn;
+		int number;
+		int lastTurn;
+		int secondToLastTurn;
 
-		public Number(long number) {
+		public Number(int number) {
 			this.number           = number;
 			this.lastTurn         = 0;
 			this.secondToLastTurn = -1;
 		}
 
-		public Number(long number, long turn) {
+		public Number(int number, int turn) {
 			this.number           = number;
 			this.lastTurn         = turn;
 			this.secondToLastTurn = -1;
@@ -39,11 +36,11 @@ public class Advent15 implements Runnable {
 			br = new BufferedReader(new FileReader(file));
 			String line;
 			while ((line = br.readLine()) != null) {
-				String[] numbers = line.split(",");
-				for (String number : numbers) {
-					long result = Long.parseLong(number);
+				String[] input = line.split(",");
+				for (String number : input) {
+					int result = Integer.parseInt(number);
 					startingNumbers.add(result);
-					numberMap.put(result, new Number(Integer.parseInt(number)));
+					numbers[result] = new Number(Integer.parseInt(number));
 				}
 			}
 		} catch (IOException e) {
@@ -61,33 +58,33 @@ public class Advent15 implements Runnable {
 
 	private void playGameOneStar() {
 
-		long turn = 0;
-		long lastNumber = -1;
-		for (Number value : numberMap.values()) {
-			value.lastTurn = turn;
-			lastNumber     = value.number;
+		int turn = 0;
+		int lastNumber = -1;
+		for (int value : startingNumbers) {
+			numbers[value].lastTurn = turn;
+			lastNumber     = value;
 			turn++;
 		}
 		System.err.println("entering");
 		while (turn < 30000000) {
-			if (numberMap.get(lastNumber).secondToLastTurn == -1) {
-				lastNumber = 0L;
-				if(numberMap.containsKey(lastNumber)){
-					Number newResult = numberMap.get(lastNumber);
+			if (numbers[lastNumber].secondToLastTurn == -1) {
+				lastNumber = 0;
+				if(numbers[lastNumber] != null){
+					Number newResult = numbers[lastNumber];
 					newResult.secondToLastTurn = newResult.lastTurn;
 					newResult.lastTurn = turn;
 				} else {
-					numberMap.putIfAbsent(lastNumber, new Number(lastNumber, turn));
+					numbers[lastNumber] = new Number(lastNumber, turn);
 				}
 			} else {
-				Number lastResult = numberMap.get(lastNumber);
+				Number lastResult = numbers[lastNumber];
 				lastNumber = lastResult.lastTurn - lastResult.secondToLastTurn;
-				if(numberMap.containsKey(lastNumber)){
-					Number newResult = numberMap.get(lastNumber);
+				if(numbers[lastNumber] != null){
+					Number newResult = numbers[lastNumber];
 					newResult.secondToLastTurn = newResult.lastTurn;
 					newResult.lastTurn = turn;
 				} else {
-					numberMap.putIfAbsent(lastNumber, new Number(lastNumber, turn));
+					numbers[lastNumber] = new Number(lastNumber, turn);
 				}
 			}
 

@@ -130,6 +130,4 @@ public class Advent12 implements Runnable{
 			e.printStackTrace();
 		}
 	}
-
-
 }
