@@ -1,4 +1,5 @@
 package com.company;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -106,9 +107,8 @@ public class Advent17 implements Runnable {
 						int resultW = w + c - 1;
 						if (resultZ + 1 == z && resultY + 1 == y && resultX + 1 == x && resultW + 1 == w) continue;
 						if ((resultZ < 0 || resultZ >= prevCubeHolder[0][0][0].length) ||
-						    (resultW < 0 || resultW >= prevCubeHolder[0][0].length) ||
-						    (resultY < 0 || resultY >= prevCubeHolder.length) || (resultX < 0 || resultX >= prevCubeHolder.length))
-							continue;
+						    (resultW < 0 || resultW >= prevCubeHolder[0][0].length) || (resultY < 0 || resultY >= prevCubeHolder.length) ||
+						    (resultX < 0 || resultX >= prevCubeHolder.length)) continue;
 						if (prevCubeHolder[resultY][resultX][resultW][resultZ] == '#') activeNeighbour++;
 						neighboursCounted++;
 					}

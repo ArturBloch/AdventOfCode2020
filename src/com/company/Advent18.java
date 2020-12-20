@@ -14,7 +14,6 @@ public class Advent18 implements Runnable{
 	File file = new File("src/files/advent18.txt");
 	ArrayList<String> expressions  = new ArrayList<>();
 
-
 	@Override public void run() {
 		readFile();
 		System.out.println(solve());
