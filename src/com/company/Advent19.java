@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Advent19 implements Runnable {
 
@@ -15,6 +16,7 @@ public class Advent19 implements Runnable {
 	ArrayList<String> messagesToValidate = new ArrayList<>();
 	ArrayList<String> allValidMessages = new ArrayList<>();
 	int longestString;
+	int validatedMessages = 0;
 
 	public class Rule {
 		int ruleId;
@@ -42,22 +44,46 @@ public class Advent19 implements Runnable {
 		for (StringBuilder fullRule : fullRules) {
 			allValidMessages.add(fullRule.toString());
 		}
-		int messageCounter = 0;
 		for (String s : messagesToValidate) {
-			if(allValidMessages.contains(s)) messageCounter++;
+			if(allValidMessages.contains(s)) validatedMessages++;
 		}
 		long end = System.nanoTime();
 		System.err.println("Time: " + (double)(end - timer) / 1000000 + " ms");
-		System.err.println(messageCounter);
+		System.err.println(validatedMessages);
 	}
 
 	private ArrayList<StringBuilder> recursiveRules(Rule rule, ArrayList<StringBuilder> buildingRules, int recursionLimit) {
+		if(buildingRules.size() == 0) return buildingRules;
+		Iterator<StringBuilder> n = buildingRules.iterator();
+		while (n.hasNext()) {
+			StringBuilder s = n.next();
+			String builderString = s.toString();
+			int counter = 0;
+			Iterator<String> stringIterator = messagesToValidate.iterator();
+			while(stringIterator.hasNext()){
+				String validateThis = stringIterator.next();
+				if(validateThis.startsWith(builderString)) {
+					counter++;
+					if(validateThis.length() == builderString.length()) {
+						stringIterator.remove();
+						validatedMessages++;
+					}
+					break;
+				}
+			}
+			if(counter == 0) n.remove();
+		}
 		if(rule.stringToMatch.equals("")){
 			if(rule.rulesToMatch.size() > 1){
 				ArrayList<StringBuilder> totalRules = new ArrayList<>();
-				for (ArrayList<Rule> rulesToMatch : rule.rulesToMatch) {
-					ArrayList<StringBuilder> tempList = deepClone(buildingRules);
-					for (Rule toMatch : rulesToMatch) {
+				for (int i = 0; i < rule.rulesToMatch.size(); i++) {
+					ArrayList<StringBuilder> tempList;
+					if(i == rule.rulesToMatch.size() - 1){
+						tempList = buildingRules;
+					} else {
+						tempList = deepClone(buildingRules);
+					}
+					for (Rule toMatch : rule.rulesToMatch.get(i)) {
 						tempList = recursiveRules(toMatch, tempList, recursionLimit);
 					}
 					totalRules.addAll(tempList);
