@@ -6,19 +6,19 @@ import java.util.*;
 public class Advent23 implements Runnable {
 
 	File file = new File("src/files/advent23.txt");
-	int[] cupConnections = new int[1000001];
+	int[] cupConnections = new int[MAX_NUMBER + 1];
 	int[] pickedUp = new int[3];
 	int currentCup;
 	int destinationCup;
 	int minNumber;
 	int maxNumber;
-	public static final int NUMBER_OF_ITERATIONS = 100;
+	public static final int NUMBER_OF_ITERATIONS = 10000000;
 	public static final int MAX_NUMBER = 1000000;
 
 	@Override public void run() {
 		readFile();
 		int counter = 0;
-
+		long start = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
 			pickedUp[0] = cupConnections[currentCup];
 			pickedUp[1] = cupConnections[pickedUp[0]];
@@ -35,19 +35,16 @@ public class Advent23 implements Runnable {
 			cupConnections[pickedUp[2]] = cupConnections[destinationCup];
 			cupConnections[destinationCup] = pickedUp[0];
 			currentCup = cupConnections[currentCup];
-			int nextCup = 1;
-			while (cupConnections[nextCup] != 1) {
-				nextCup = cupConnections[nextCup];
-			}
+		}
+		long end = System.nanoTime();
+		System.err.println((end - start) / 1000000 + " ms");
 
-		}
 		System.err.println("PRINT ");
-		int nextCup = 1;
 		System.err.print(" 1 ");
-		while (cupConnections[nextCup] != 1) {
-			System.err.print(cupConnections[nextCup] + " ");
-			nextCup = cupConnections[nextCup];
-		}
+		long result = cupConnections[1];
+		System.err.println("First following " + result);
+		result = result * cupConnections[(int)result];
+		System.err.println(result);
 	}
 
 	public void readFile() {
@@ -58,7 +55,6 @@ public class Advent23 implements Runnable {
 
 			while ((line = br.readLine()) != null) {
 				if (!line.isEmpty()) {
-					cupConnections = new int[line.length() + 1];
 					for (int i = 0; i < line.length() - 1; i++) {
 						int thisNumber = Integer.parseInt(line.charAt(i) + "");
 						int nextNumber = Integer.parseInt((line.charAt(i + 1)) + "");
@@ -71,17 +67,14 @@ public class Advent23 implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		cupConnections[lastCup] = currentCup;
+		cupConnections[MAX_NUMBER] = currentCup;
 		minNumber = Arrays.stream(cupConnections).filter(e -> e != 0).min().getAsInt();
 		maxNumber = Arrays.stream(cupConnections).max().getAsInt();
-		System.err.println(minNumber);
-		System.err.println(maxNumber);
-//		cupConnections[lastCup] = maxNumber + 1;
-//		cupConnections[MAX_NUMBER] = currentCup;
-//		for (int i = maxNumber + 1; i < MAX_NUMBER; i++) {
-//			cupConnections[i] = i + 1;
-//		}
-//		maxNumber = MAX_NUMBER;
+		cupConnections[lastCup] = maxNumber + 1;
+		for (int i = maxNumber + 1; i < MAX_NUMBER; i++) {
+			cupConnections[i] = i + 1;
+		}
+		maxNumber = MAX_NUMBER;
 
 	}
 }
